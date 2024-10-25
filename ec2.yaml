@@ -12,9 +12,9 @@
         msg: "Using Python {{ ansible_python_version }}"
     - name: Install venv if not installed (for Debian-based systems)
       apt:
-      name: python3-venv
-      state: present
-      when: ansible_os_family == "Debian"
+        name: python3-venv
+        state: present
+        when: ansible_os_family == "Debian"
 
     - name: Create a virtual environment
       command: python3 -m venv /opt/ansible_venv
