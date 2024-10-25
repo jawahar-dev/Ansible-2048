@@ -10,11 +10,22 @@
     - name: Print python version
       debug:
         msg: "Using Python {{ ansible_python_version }}"
-    - name: Install dependencies
-      shell: "/usr/bin/python3 -m pip install {{ item }}"
+    - name: Install venv if not installed (for Debian-based systems)
+      apt:
+      name: python3-venv
+      state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Create a virtual environment
+      command: python3 -m venv /opt/ansible_venv
+      args:
+        creates: /opt/ansible_venv/bin/activate  # Only creates if venv doesn't exist
+
+    - name: Install dependencies in virtual environment
+      shell: "/opt/ansible_venv/bin/pip install {{ item }}"
       loop:
-       - boto3
-       - botocore
+        - boto3
+        - botocore
   vars:
     ansible_python_interpreter: /usr/bin/python3
     keypair: Mumbai
