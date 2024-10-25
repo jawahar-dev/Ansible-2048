@@ -15,11 +15,13 @@
         name: python3-venv
         state: present
       when: ansible_os_family == "Debian"
+      become: yes
 
     - name: Create a virtual environment
       command: python3 -m venv /opt/ansible_venv
       args:
         creates: /opt/ansible_venv/bin/activate  # Only creates if venv doesn't exist
+      become: yes
 
     - name: Install dependencies in virtual environment
       shell: "/opt/ansible_venv/bin/pip install {{ item }}"
